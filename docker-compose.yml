@@ -29,8 +29,8 @@ services:
     command: ["/utils/wait-for-it.sh", "elasticsearch:9200",
       "--timeout=0",
       "--", "/utils/index.py",
-      "data/Getuigen_Verhalen_ids",
-      "data/Getuigen_Verhalen_corpus",
+      "data/EGO_Doc_ids",
+      "data/corpus_input",
       "elasticsearch"]
     volumes:
       - ./data:/data:ro

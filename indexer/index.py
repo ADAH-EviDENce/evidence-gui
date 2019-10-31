@@ -3,6 +3,7 @@
 from collections import defaultdict
 import json
 from io import StringIO
+from os.path import join
 import re
 import sys
 
@@ -64,17 +65,21 @@ CHUNKSIZE = 100
 snippets = defaultdict(set)
 
 print('Indexing snippets...')
-with open(sys.argv[1]) as idfile, open(sys.argv[2]) as textfile:
+
+textdir = sys.argv[2]
+with open(sys.argv[1]) as idfile:
     data = StringIO()
 
     n = 0
-    for ident, text in zip(idfile, textfile):
+    for ident in idfile:
         ident = ident.strip()
         json.dump({'index': {'_id': ident}}, data)
         data.write('\n')
 
-        doc, _ = ident.split('_paragraph', 1)
+        doc, part = ident.split('_paragraph_', 1)
         snippets[doc].add(ident)
+
+        text = open(join(textdir, '%s/paragraph_%s.txt' % (doc, part))).read()
 
         json.dump({'text': text, 'document': doc}, data)
         data.write('\n')
